@@ -62,7 +62,7 @@ router.put("/:id" , auth, async (req,res) => {
     try {
         const {error} = cardSchema.validate(req.body);
         if(error) return res.status(400).send(error.message)
-        let card = await Card.findByIdAndUpdate({_id: req.params.id , user_id: req.payload._id}, req.body, {new: true})
+        let card = await Card.findOneAndUpdate({_id: req.params.id , user_id: req.payload._id}, req.body, {new: true})
         if (!card) return res.status(404).send("Card was not found - put")
         res.status(200).send(card);
     } catch (error) {
@@ -72,7 +72,7 @@ router.put("/:id" , auth, async (req,res) => {
 
 router.delete("/:id" , auth, async (req,res) => {
     try {
-        const card = await Card.findByIdAndRemove({_id: req.params.id})
+        const card = await Card.findOneAndRemove({_id: req.params.id})
         if(!card) return res.status(404).send("card was not found- delete")
         res.status(200).send("card was deleted")
     } catch (error) {
